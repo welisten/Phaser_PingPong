@@ -1,15 +1,22 @@
+
 import Phaser from "phaser";
+// Scenes
 import TitleScreen from "./scenes/TitleScreen";
 import Game from "./scenes/Game";
 import GameBackground from "./scenes/gameBackground";
 
+// Screen's height and width information
 let windowInnerW = window.innerWidth - 20
 let windowInnerH = window.innerHeight - 20
+
+// Phaser's instance setup
 const config = {
     width: windowInnerW,
     height: windowInnerH,
+    // let phaser automatcaly choose the best render option
     type: Phaser.AUTO,
     backgroundColor: 0x2c3e50,
+    // game's physics system
     physics: {
         default: 'arcade',
         arcade: {
