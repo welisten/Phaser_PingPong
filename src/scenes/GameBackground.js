@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 
-let middleWidth = (window.innerWidth - 20) / 2
-let midleHeight = (window.innerHeight - 20) / 2 
+import { White } from '../consts/Colors'
+import {gameHalfWidth, gameHalfHeight, gameFullHeight, gameFullWidth} from '../consts/Sizes'
 
 export default class GameBackground extends Phaser.Scene
 {
@@ -12,16 +12,16 @@ export default class GameBackground extends Phaser.Scene
 
     create() 
     {
-        this.add.rectangle(20, 20, (middleWidth *2) -40, (midleHeight * 2) -40, 0xffffff, 1 )
+        this.add.rectangle(20, 20, (gameFullWidth - 40), (gameFullHeight - 40), White, 1 )
             .setOrigin(0.0)
-            .setStrokeStyle(2, 0xffffff, 1)
+            .setStrokeStyle(2, White, 1)
             .isFilled = false
         
-        this.add.line( middleWidth, 0, 0, 20 , 0, (midleHeight*2 -20), 0xffffff, 1)
+        this.add.line( gameHalfWidth, 0, 0, 20 , 0, (gameFullHeight -20), White, 1)
             .setOrigin(0 ,0)
 
-        this.add.circle(middleWidth, midleHeight, midleHeight * 0.3, 0xffffff,  1)
-            .setStrokeStyle(4, 0xffffff, 1)
+        this.add.circle(gameHalfWidth, gameHalfHeight, gameHalfHeight * 0.3, White,  1)
+            .setStrokeStyle(4, White, 1)
             .isFilled = false
     }
 }
