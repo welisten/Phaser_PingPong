@@ -20,17 +20,6 @@ const config = {
     // let phaser automatcaly choose the best render option
     type: Phaser.AUTO,
     backgroundColor: DarkGray_background,
-// Screen's height and width information
-let windowInnerW = window.innerWidth - 20
-let windowInnerH = window.innerHeight - 20
-
-// Phaser's instance setup
-const config = {
-    width: windowInnerW,
-    height: windowInnerH,
-    // let phaser automatcaly choose the best render option
-    type: Phaser.AUTO,
-    backgroundColor: 0x2c3e50,
     // game's physics system
     physics: {
         default: 'arcade',
