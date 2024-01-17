@@ -1,22 +1,17 @@
 import Phaser from "phaser";
 
 import WebFontFile from "./webFontFile";
+import GameBackground from "./gameBackground";
 
-import { GameBackground, GameOver } from '../consts/SceneKeys'
-import { gameFullWidth, gameFullHeight, gameHalfWidth, gameHalfHeight } from '../consts/Sizes'
-import { White, Green_Score, Red_Score } from '../consts/Colors'
 
-const GameState = {
-    Running: 'running',
-    PlayerWon: 'player-won',
-    AIWon: 'ai-won'
-}
+let windowInnerW = window.innerWidth - 20
+let windowInnerH = window.innerHeight - 20 
+
 export default class Game extends Phaser.Scene
 {
 
-    init(){
-        // variable stored to be used before
-        this.gameState = GameState.Running
+    init()
+    {
         this.paddleRightVelocity = new Phaser.Math.Vector2(0, 0)
         
         this.leftScore = 0
@@ -25,58 +20,50 @@ export default class Game extends Phaser.Scene
         // there is other ways to do this
         this.paused = false
     }
-
-    preload(){
+    preload()
+    {
         const fonts = new WebFontFile(this.load, 'Pixelify Sans')
         this.load.addFile(fonts)
     }
 
-    create(){
-        // add and setting the background as a background
-        this.scene.run(GameBackground)
-        this.scene.sendToBack(GameBackground)
+    create()
+    {
+        this.scene.run('game-background')
+        this.scene.sendToBack('game-background')
+        this.physics.world.setBounds(-100, 20, windowInnerW+ 200, windowInnerH - 40)
         
-        // setting the game's screen bounds
-        this.physics.world.setBounds( -100, 20, gameFullWidth + 200, gameFullHeight - 40 )
-        
-
-        // creating the ball (Game_object)
-        this.ball = this.add.circle(gameHalfWidth, gameHalfHeight, 10, White, 1)
-        
-        //adding the ball to be affected by world's physics rules
+        this.ball = this.add.circle(windowInnerW /2, windowInnerH / 2, 10, 0xffffff, 1)
+      
         this.physics.add.existing(this.ball)
-        this.ball.body.setBounce(1, 1) // -> coefficient of restitution on axio X and Y
-        this.ball.body.setCircle(10) // set the body to be a circle instead of a square
+        this.ball.body.setBounce(1, 1)
 
-
+        this.resetBall()
+        
         this.ball.body.setCollideWorldBounds(true, 1, 1)
         
-        // making paddles
-        this.paddleLeft = this.add.rectangle( 35, gameHalfHeight, 20, 150, White, 1)
-        this.physics.add.existing(this.paddleLeft, true) // -> static
+        this.paddleLeft = this.add.rectangle( 35, (windowInnerH / 2), 20, 150, 0xffffff)
+        this.physics.add.existing(this.paddleLeft, true)
         
-        this.paddleRight = this.add.rectangle(gameFullWidth - 35, gameHalfHeight, 20, 150, White, 1)
+        this.paddleRight = this.add.rectangle(windowInnerW - 35, (windowInnerH / 2), 20, 150, 0xffffff, 1)
         this.physics.add.existing(this.paddleRight, true)
         
         // adding the collision possibility between the paddle and the ball
         this.physics.add.collider(this.paddleLeft, this.ball)
         this.physics.add.collider(this.paddleRight, this.ball)
         
-
-        // the score interface / the label
-        this.leftScoreLabel = this.add.text(gameHalfWidth * 0.75  , gameHalfHeight * 0.5, '0', {
+        this.leftScoreLabel = this.add.text((windowInnerW / 2 ) * 0.75  , (windowInnerH / 2) * 0.5, '0', {
             fontFamily: '"Pixelify Sans"',
             fontSize: gameFullWidth * 0.08,
             fontStyle: 'bold',
-            color: Green_Score 
+            color: '#2ecc71'
         })
         .setOrigin(0.5, 0.5)
         
-        this.rightScoreLabel = this.add.text(gameHalfWidth * 1.25, gameHalfHeight * 1.5, '0', {
+        this.rightScoreLabel = this.add.text((windowInnerW / 2) * 1.25, (windowInnerH / 2) * 1.5, '0', {
             fontFamily: '"Pixelify Sans"',
             fontSize: gameFullWidth * 0.08,
             fontStyle: 'bold',
-            color: Red_Score
+            color: '#e74c3c'
         })
         .setOrigin(0.5, 0.5)
         
@@ -99,15 +86,11 @@ export default class Game extends Phaser.Scene
     processPlayerInput(){
         /**@type {Phaser.Physics.Arcade.Body} */
         const body = this.paddleLeft.body
-        
-        if (this.cursors.up.isDown)
-        {
-            this.paddleLeft.y -= 10
-            body.updateFromGameObject() // atualiza o corpo do objeto na DOM
-        } 
-        else if(this.cursors.down.isDown)
-        {
-            this.paddleLeft.y += 10
+        if (this.cursors.up.isDown){
+            this.paddleLeft.y -= 5
+            body.updateFromGameObject()
+        } else if(this.cursors.down.isDown){
+            this.paddleLeft.y += 5
             body.updateFromGameObject()
         }
     }
@@ -122,12 +105,9 @@ export default class Game extends Phaser.Scene
             return
         }
 
-        // the speed of right paddle AI reaction 
-        const aiSpeed = 2.5
-        
-        if( diff < 0) // the ball is above the paddle - The paddle must up
-        {
-            
+        const aiSpeed = 4
+        if( diff < 0){
+            // the ball is above the paddle
             this.paddleRightVelocity.y = -aiSpeed
             
             if(this.paddleRightVelocity.y < -10)
@@ -149,18 +129,7 @@ export default class Game extends Phaser.Scene
         this.paddleRight.y += this.paddleRightVelocity.y
         this.paddleRight.body.updateFromGameObject()
 
-    }
-
-    checkScore(){ // SCORING LOGIC
-        let x = this.ball.x
-        const leftBound = -30
-        const rightBound = gameFullWidth + 30
-        
-        if(x >= leftBound && x <= rightBound) {
-            return
-        }
-
-        if(this.ball.x < leftBound)
+        if(this.ball.x < -30)
         {
             this.incrementRightScore()
         }
@@ -212,13 +181,11 @@ export default class Game extends Phaser.Scene
     resetBall(){ //BALL'S VELOCITY AND RANDOM DIRECTION LOGIC
         const ballVelocity = 400
 
-        // positioning the ball
-        this.ball.setPosition(gameHalfWidth, gameHalfHeight)
+        this.ball.setPosition((windowInnerW/ 2), (windowInnerH / 2))
+        const angle = Phaser.Math.Between(0, 360) 
+        const vec =  this.physics.velocityFromAngle(angle, ballVelocity)
 
-        // setting a random direction based on an angle
-        const angle = Phaser.Math.Between(10, 60 )
-        const factor = 90 * Phaser.Math.Between(1, 4)
-        const vec =  this.physics.velocityFromAngle(angle + factor, ballVelocity)
+
         this.ball.body.setVelocity(vec.x, vec.y)
     }
 }
