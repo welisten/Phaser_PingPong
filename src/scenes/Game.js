@@ -1,32 +1,42 @@
+// PHASER 3.5
 import Phaser from "phaser";
 
+// WebFontFile API
 import WebFontFile from "./webFontFile";
 
+// Constants
 import { GameBackground, GameOver } from '../consts/SceneKeys'
 import { gameFullWidth, gameFullHeight, gameHalfWidth, gameHalfHeight } from '../consts/Sizes'
 import { White, Green_Score, Red_Score } from '../consts/Colors'
 
+// Game's state Object
 const GameState = {
     Running: 'running',
     PlayerWon: 'player-won',
     AIWon: 'ai-won'
 }
+
+
+
 export default class Game extends Phaser.Scene
 {
 
-    init(){
-        // variable stored to be used before
+    init(){ // variable delaration to be used after
+        
         this.gameState = GameState.Running
+        
+        // bidimentional vector to track the right paddle's velocity and direction
         this.paddleRightVelocity = new Phaser.Math.Vector2(0, 0)
         
         this.leftScore = 0
         this.rightScore = 0
 
-        // there is other ways to do this
+        // THERE ARE OTHERS WAYS TO DO THIS
         this.paused = false
     }
 
     preload(){
+        // loading the web fonts using the WebFontFile API
         const fonts = new WebFontFile(this.load, 'Pixelify Sans')
         this.load.addFile(fonts)
     }
@@ -47,7 +57,6 @@ export default class Game extends Phaser.Scene
         this.physics.add.existing(this.ball)
         this.ball.body.setBounce(1, 1) // -> coefficient of restitution on axio X and Y
         this.ball.body.setCircle(10) // set the body to be a circle instead of a square
-
 
         this.ball.body.setCollideWorldBounds(true, 1, 1)
         
@@ -87,16 +96,18 @@ export default class Game extends Phaser.Scene
     }
 
     update(){
+        //check the game state
         if(this.paused || this.gameState !== GameState.Running)
         {
             return
         }
+
         this.processPlayerInput()
         this.updateAi()
         this.checkScore()
     }
 
-    processPlayerInput(){
+    processPlayerInput(){ // LEFT PADDLE CONTROL
         /**@type {Phaser.Physics.Arcade.Body} */
         const body = this.paddleLeft.body
         
@@ -141,7 +152,8 @@ export default class Game extends Phaser.Scene
             
             this.paddleRightVelocity.y = aiSpeed
         
-            if(this.paddleRightVelocity.y > 10){
+            if(this.paddleRightVelocity.y > 10)
+            {
                 this.paddleRightVelocity.y = 10
             }
         }

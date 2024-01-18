@@ -1,11 +1,13 @@
 
 import Phaser from "phaser";
+
 // Scenes
 import TitleScreen from "./scenes/TitleScreen";
 import Game from "./scenes/Game";
 import GameBackground from "./scenes/gameBackground";
 import GameOver from "./scenes/GameOver";
 
+// Conts
 import * as SceneKeys from './consts/SceneKeys'
 import { gameFullWidth, gameFullHeight } from './consts/Sizes'
 import { DarkGray_background } from './consts/Colors'
@@ -17,7 +19,7 @@ import { DarkGray_background } from './consts/Colors'
 const config = {
     width: gameFullWidth,
     height: gameFullHeight,
-    // let phaser automatcaly choose the best render option
+    // let phaser automatically choose the best render option
     type: Phaser.AUTO,
     backgroundColor: DarkGray_background,
     // game's physics system
@@ -32,10 +34,11 @@ const config = {
 
 const game = new Phaser.Game(config)
 
+// All the scenes must to be added here
 game.scene.add(SceneKeys.TitleScreen, TitleScreen)
 game.scene.add(SceneKeys.Game, Game)
 game.scene.add(SceneKeys.GameBackground, GameBackground)
 game.scene.add(SceneKeys.GameOver, GameOver)
 
+// start the first scene(supposing all of them are chained)
 game.scene.start(SceneKeys.TitleScreen)
-// game.scene.start(SceneKeys.Game)
