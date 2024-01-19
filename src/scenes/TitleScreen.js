@@ -1,8 +1,11 @@
 import Phaser from "phaser";
-import { Game } from '../consts/SceneKeys'
 import WebFontFile from "./webFontFile";
+// Scenes
+import { Game } from '../consts/SceneKeys'
+// Consts
 import {gameHalfWidth, gameHalfHeight} from '../consts/Sizes'
-
+import {Pixelify} from '../consts/Fonts'
+import * as AudioKeys from '../consts/AudioKeys'
 export default class TitleScreen extends Phaser.Scene
 {
     preload(){
@@ -15,20 +18,21 @@ export default class TitleScreen extends Phaser.Scene
         const tittle = this.add.text( gameHalfWidth, gameHalfHeight * 0.65, 'Old School Ping Pong', {
             fontSize: gameHalfWidth * 0.15,
             fontStyle: 'bold',
-            fontFamily: '"Pixelify Sans"'
+            fontFamily: Pixelify
         })
         tittle.setOrigin(0.5, 0.5)
 
         this.add.text(gameHalfWidth, gameHalfHeight * 1.1, 'Press SPACE to Start', {
             fontSize: gameHalfWidth * 0.08,
             fontStyle: 'bold',
-            fontFamily: '"Pixelify Sans"',
+            fontFamily: Pixelify,
             color: '#3498db'
 
         })
         .setOrigin(0.5, 0.5)
 
         this.input.keyboard.once('keydown-SPACE', () => {
+            this.sound.play(AudioKeys.PongBeep)
             this.scene.start(Game)
         })
 

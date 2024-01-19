@@ -4,10 +4,13 @@ import Phaser from "phaser";
 // WebFontFile API
 import WebFontFile from "./webFontFile";
 
-// Constants
+// Scenes
 import { GameBackground, GameOver } from '../consts/SceneKeys'
+
+// Constants
 import { gameFullWidth, gameFullHeight, gameHalfWidth, gameHalfHeight } from '../consts/Sizes'
 import { White, Green_Score, Red_Score } from '../consts/Colors'
+import { Pixelify } from "../consts/Fonts";
 
 // Game's state Object
 const GameState = {
@@ -35,13 +38,9 @@ export default class Game extends Phaser.Scene
         this.paused = false
     }
 
-    preload(){
-        // loading the web fonts using the WebFontFile API
-        const fonts = new WebFontFile(this.load, 'Pixelify Sans')
-        this.load.addFile(fonts)
-    }
 
     create(){
+
         // add and setting the background as a background
         this.scene.run(GameBackground)
         this.scene.sendToBack(GameBackground)
@@ -74,7 +73,7 @@ export default class Game extends Phaser.Scene
 
         // the score interface / the label
         this.leftScoreLabel = this.add.text(gameHalfWidth * 0.75  , gameHalfHeight * 0.5, '0', {
-            fontFamily: '"Pixelify Sans"',
+            fontFamily: Pixelify,
             fontSize: gameFullWidth * 0.08,
             fontStyle: 'bold',
             color: Green_Score 
@@ -82,7 +81,7 @@ export default class Game extends Phaser.Scene
         .setOrigin(0.5, 0.5)
         
         this.rightScoreLabel = this.add.text(gameHalfWidth * 1.25, gameHalfHeight * 1.5, '0', {
-            fontFamily: '"Pixelify Sans"',
+            fontFamily: Pixelify,
             fontSize: gameFullWidth * 0.08,
             fontStyle: 'bold',
             color: Red_Score
@@ -181,17 +180,15 @@ export default class Game extends Phaser.Scene
             this.incrementLeftScore()
         }
 
-        const maxScore = 1
+        const maxScore = 2
         if(this.leftScore >= maxScore)
         {
             //Player won
-            console.log("Player won")
             this.gameState = GameState.PlayerWon
         }
         else if(this.rightScore >= maxScore)
         {
             // the AI won
-            console.log("AI won")
             this.gameState = GameState.AIWon
         }
 
@@ -202,6 +199,7 @@ export default class Game extends Phaser.Scene
         else
         {
             this.physics.world.remove(this.ball.body)
+            this.scene.stop(GameBackground)
 
             // Show the Game Over/Win screen
             this.scene.start(GameOver, {

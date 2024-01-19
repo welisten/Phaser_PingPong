@@ -2,19 +2,22 @@ import Phaser from "phaser";
 
 import WebFontFile from "./webFontFile";
 
-import {White, Green_Score, Red_Score} from '../consts/Colors'
-import {gameHalfHeight, gameHalfWidth} from '../consts/Sizes'
-import { TitleScreen } from '../consts/SceneKeys'
+import { TitleScreen} from '../consts/SceneKeys'
 
-const Title = {
-    title: 'Game over !',
-    FontFamily: '"Pixelify Sans"',
-    FontSize: gameHalfWidth * 0.3,
-    Color: Red_Score
-}
-
+import { Pixelify } from "../consts/Fonts";
+import * as Colors from '../consts/Colors'
+import { gameHalfHeight, gameHalfWidth, gameFullHeight, gameFullWidth } from '../consts/Sizes'
 
 export default class GameOver extends Phaser.Scene{
+    init()
+    {
+        this.Title = {
+            title: 'Game over !',
+            FontFamily: Pixelify,
+            FontSize: gameHalfWidth * 0.3,
+            Color: Colors.Red_Score
+        }
+    }
 
     preloade()
     {
@@ -32,29 +35,38 @@ export default class GameOver extends Phaser.Scene{
 
         if(data.leftScore > data.rightScore)
         {
-            // you win
-            Title.title =  ' You Win !'
-            Title.Color = Green_Score
+            // Player win
+            this.Title.title =  ' You Win !'
+            this.Title.Color = Colors.Green_Score
+        } 
+        else
+        {
+
         }
 
-        this.add.text(gameHalfWidth, gameHalfHeight, Title.title, {
-            fontFamily: Title.FontFamily,
-            fontSize: Title.FontSize,
+        this.add.rectangle(20, 20, (gameFullWidth - 40), (gameFullHeight - 40), Colors.White, 1 )
+        .setOrigin(0.0)
+        .setStrokeStyle(2, Colors.White, 1)
+        .isFilled = false
+
+        this.add.text(gameHalfWidth, gameHalfHeight * 0.65, this.Title.title, {
+            fontFamily: this.Title.FontFamily,
+            fontSize: this.Title.FontSize,
             fontStyle: 'bold',
-            color: Title.Color
+            color: this.Title.Color
         })
         .setOrigin(0.5)
 
-        this.add.text(gameHalfWidth, gameHalfHeight, 'Press "SPACE" to continue', {
-            fontFamily: '"Pixalify Sans"',
-            fontSize: gameHalfWidth * 0.2,
+        this.add.text(gameHalfWidth, gameHalfHeight * 1.1, 'Press "SPACE" to continue', {
+            fontFamily: Pixelify,
+            fontSize: gameHalfWidth * 0.08,
             fontStyle: 'bold',
-            color: White
+            color: Colors.WhiteStr
         })
-        .setOrigin(0.5, 0.5)
+        .setOrigin(0.5)
 
-        this.input.keybord.once('keybord-SPACE', () => {
-            this.Scene.start(TitleScreen)
+        this.input.keyboard.once('keydown-SPACE', () => {
+            this.scene.start(TitleScreen)
         })
     }
 }
