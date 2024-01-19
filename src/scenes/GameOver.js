@@ -2,11 +2,15 @@ import Phaser from "phaser";
 
 import WebFontFile from "./webFontFile";
 
+// Scenes
 import { TitleScreen} from '../consts/SceneKeys'
 
+// Constants
 import { Pixelify } from "../consts/Fonts";
-import * as Colors from '../consts/Colors'
 import { gameHalfHeight, gameHalfWidth, gameFullHeight, gameFullWidth } from '../consts/Sizes'
+import * as Colors from '../consts/Colors'
+import * as AudioKeys from '../consts/AudioKeys'
+
 
 export default class GameOver extends Phaser.Scene{
     init()
@@ -15,7 +19,8 @@ export default class GameOver extends Phaser.Scene{
             title: 'Game over !',
             FontFamily: Pixelify,
             FontSize: gameHalfWidth * 0.3,
-            Color: Colors.Red_Score
+            Color: Colors.Red_Score,
+            Song: AudioKeys.GameOverSound
         }
     }
 
@@ -38,11 +43,9 @@ export default class GameOver extends Phaser.Scene{
             // Player win
             this.Title.title =  ' You Win !'
             this.Title.Color = Colors.Green_Score
+            this.Title.Song = AudioKeys.WinnerSound
         } 
-        else
-        {
 
-        }
 
         this.add.rectangle(20, 20, (gameFullWidth - 40), (gameFullHeight - 40), Colors.White, 1 )
         .setOrigin(0.0)
@@ -64,6 +67,8 @@ export default class GameOver extends Phaser.Scene{
             color: Colors.WhiteStr
         })
         .setOrigin(0.5)
+
+        this.sound.play(this.Title.Song)
 
         this.input.keyboard.once('keydown-SPACE', () => {
             this.scene.start(TitleScreen)

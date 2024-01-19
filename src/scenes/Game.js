@@ -11,6 +11,7 @@ import { GameBackground, GameOver } from '../consts/SceneKeys'
 import { gameFullWidth, gameFullHeight, gameHalfWidth, gameHalfHeight } from '../consts/Sizes'
 import { White, Green_Score, Red_Score } from '../consts/Colors'
 import { Pixelify } from "../consts/Fonts";
+import * as AudioKeys from '../consts/AudioKeys'
 
 // Game's state Object
 const GameState = {
@@ -57,7 +58,8 @@ export default class Game extends Phaser.Scene
         this.ball.body.setBounce(1, 1) // -> coefficient of restitution on axio X and Y
         this.ball.body.setCircle(10) // set the body to be a circle instead of a square
 
-        this.ball.body.setCollideWorldBounds(true, 1, 1)
+        this.ball.body.setCollideWorldBounds(true, 1, 1,)
+        this.ball.body.onWorldBounds = true //trigger the event
         
         // making paddles
         this.paddleLeft = this.add.rectangle( 35, gameHalfHeight, 20, 150, White, 1)
@@ -67,12 +69,13 @@ export default class Game extends Phaser.Scene
         this.physics.add.existing(this.paddleRight, true)
         
         // adding the collision possibility between the paddle and the ball
-        this.physics.add.collider(this.paddleLeft, this.ball)
-        this.physics.add.collider(this.paddleRight, this.ball)
+        this.physics.add.collider(this.paddleLeft, this.ball , this.handlePaddlesBallCollision, undefined, this)
+        this.physics.add.collider(this.paddleRight, this.ball, this.handlePaddlesBallCollision, undefined, this)
         
+        this.physics.world.on('worldbounds', this.handleBallWorldBoundCollision, this)
 
         // the score interface / the label
-        this.leftScoreLabel = this.add.text(gameHalfWidth * 0.75  , gameHalfHeight * 0.5, '0', {
+        this.leftScoreLabel = this.add.text(gameHalfWidth * 0.75  , gameHalfHeight * 0.5, '0',  {
             fontFamily: Pixelify,
             fontSize: gameFullWidth * 0.08,
             fontStyle: 'bold',
@@ -93,6 +96,7 @@ export default class Game extends Phaser.Scene
             this.resetBall()
         })
     }
+
 
     update(){
         //check the game state
@@ -231,4 +235,20 @@ export default class Game extends Phaser.Scene
         const vec =  this.physics.velocityFromAngle(angle + factor, ballVelocity)
         this.ball.body.setVelocity(vec.x, vec.y)
     }
+    
+    handlePaddlesBallCollision(paddle, ball){
+        this.sound.play(AudioKeys.PongBeep)
+    }
+
+    handleBallWorldBoundCollision(body, up, down, left, right){
+        if(left || right){
+            return
+        }
+        this.sound.play(AudioKeys.PongPlop)
+    }
+
+    handleGameOver(){
+        
+    }
+
 }

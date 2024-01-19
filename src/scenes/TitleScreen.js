@@ -12,9 +12,13 @@ export default class TitleScreen extends Phaser.Scene
         const font =  new WebFontFile(this.load, ['Pixelify Sans'])
         this.load.addFile(font)
 
+        this.load.audio(AudioKeys.TitleSong, 'assets/titleSong.mp3')
+
     }
 
     create() {
+        this.sound.play(AudioKeys.TitleSong)
+        
         const tittle = this.add.text( gameHalfWidth, gameHalfHeight * 0.65, 'Old School Ping Pong', {
             fontSize: gameHalfWidth * 0.15,
             fontStyle: 'bold',
@@ -31,7 +35,9 @@ export default class TitleScreen extends Phaser.Scene
         })
         .setOrigin(0.5, 0.5)
 
+
         this.input.keyboard.once('keydown-SPACE', () => {
+            this.sound.stopByKey(AudioKeys.TitleSongs)
             this.sound.play(AudioKeys.PongBeep)
             this.scene.start(Game)
         })

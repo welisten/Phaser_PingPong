@@ -14,6 +14,9 @@ export default class Preload extends Phaser.Scene
 
         this.load.audio(AudioKeys.PongBeep, 'assets/ping_pong_8bit_beeep.wav')
         this.load.audio(AudioKeys.PongPlop, 'assets/ping_pong_8bit_plop.wav')
+        this.load.audio(AudioKeys.GameOverSound, 'assets/gameover.wav')
+        this.load.audio(AudioKeys.WinnerSound, 'assets/win.wav')
+        this.load.audio(AudioKeys.TitleSong, 'assets/titleSong.mp3')
     }
 
     create(){

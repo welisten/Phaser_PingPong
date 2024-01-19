@@ -6,7 +6,7 @@ import TitleScreen from "./scenes/TitleScreen";
 import Game from "./scenes/Game";
 import GameBackground from "./scenes/gameBackground";
 import GameOver from "./scenes/GameOver";
-import Preload from "./scenes/preload";
+import Preload from "./scenes/Preload";
 
 // Conts
 import * as SceneKeys from './consts/SceneKeys'
