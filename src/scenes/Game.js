@@ -56,6 +56,7 @@ export default class Game extends Phaser.Scene
         //adding the ball to be affected by world's physics rules
         this.physics.add.existing(this.ball)
         this.ball.body.setBounce(1, 1) // -> coefficient of restitution on axio X and Y
+        this.ball.body.setMaxSpeed(600)
         this.ball.body.setCircle(10) // set the body to be a circle instead of a square
 
         this.ball.body.setCollideWorldBounds(true, 1, 1,)
@@ -82,6 +83,8 @@ export default class Game extends Phaser.Scene
             color: Green_Score 
         })
         .setOrigin(0.5, 0.5)
+
+        this.leftScoreLabel.setDepth(-1)
         
         this.rightScoreLabel = this.add.text(gameHalfWidth * 1.25, gameHalfHeight * 1.5, '0', {
             fontFamily: Pixelify,
@@ -90,6 +93,8 @@ export default class Game extends Phaser.Scene
             color: Red_Score
         })
         .setOrigin(0.5, 0.5)
+        this.rightScoreLabel.setDepth(-1)
+
         
         this.cursors = this.input.keyboard.createCursorKeys()
         this.time.delayedCall(1000, () => {
@@ -137,7 +142,7 @@ export default class Game extends Phaser.Scene
         }
 
         // the speed of right paddle AI reaction 
-        const aiSpeed = 2.5
+        const aiSpeed = 3
         
         if( diff < 0) // the ball is above the paddle - The paddle must up
         {
@@ -167,7 +172,8 @@ export default class Game extends Phaser.Scene
     }
 
     checkScore(){ // SCORING LOGIC
-        let x = this.ball.x
+        let x = this.ball.x  
+
         const leftBound = -30
         const rightBound = gameFullWidth + 30
         
@@ -184,7 +190,7 @@ export default class Game extends Phaser.Scene
             this.incrementLeftScore()
         }
 
-        const maxScore = 2
+        const maxScore = 3
         if(this.leftScore >= maxScore)
         {
             //Player won
@@ -238,6 +244,12 @@ export default class Game extends Phaser.Scene
     
     handlePaddlesBallCollision(paddle, ball){
         this.sound.play(AudioKeys.PongBeep)
+
+        console.log(this.ball.body.velocity)
+        const vel = this.ball.body.velocity
+        vel.x *= 1.05
+        vel.y *= 1.05
+        this.ball.body.setVelocity(vel.x, vel.y)
     }
 
     handleBallWorldBoundCollision(body, up, down, left, right){
