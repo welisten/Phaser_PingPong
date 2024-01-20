@@ -1,5 +1,7 @@
+// Phaser3.5
 import Phaser from "phaser";
 
+// WebFontLoader Library
 import WebFontFile from "./webFontFile";
 
 // Scenes
@@ -13,6 +15,7 @@ import * as AudioKeys from '../consts/AudioKeys'
 
 
 export default class GameOver extends Phaser.Scene{
+    
     init()
     {
         this.Title = {
@@ -33,12 +36,11 @@ export default class GameOver extends Phaser.Scene{
     /**
     * @param {{ leftScore: number, rightScore: number}} data 
     */
-
-    create(data)
+    create( data )
     {
 
 
-        if(data.leftScore > data.rightScore)
+        if( data.leftScore > data.rightScore )
         {
             // Player win
             this.Title.title =  ' You Win !'
@@ -48,11 +50,11 @@ export default class GameOver extends Phaser.Scene{
 
 
         this.add.rectangle(20, 20, (gameFullWidth - 40), (gameFullHeight - 40), Colors.White, 1 )
-        .setOrigin(0.0)
-        .setStrokeStyle(2, Colors.White, 1)
+        .setOrigin( 0 )
+        .setStrokeStyle( 2, Colors.White, 1 )
         .isFilled = false
 
-        this.add.text(gameHalfWidth, gameHalfHeight * 0.65, this.Title.title, {
+        this.add.text( gameHalfWidth, gameHalfHeight * 0.65, this.Title.title, {
             fontFamily: this.Title.FontFamily,
             fontSize: this.Title.FontSize,
             fontStyle: 'bold',

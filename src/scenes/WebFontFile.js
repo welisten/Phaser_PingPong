@@ -1,5 +1,7 @@
+// Phaser3.5
 import Phaser from 'phaser'
 
+// WebFontLoader Library
 import WebFontLoader from 'webfontloader'
 
 export default class WebFontFile extends Phaser.Loader.File

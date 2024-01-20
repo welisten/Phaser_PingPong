@@ -1,4 +1,7 @@
-// const
+// const maxScore
+// const iaSpeed
+// const ballVelocity
+// const ballAccelerationCoefficient
 
 // export 
 // {

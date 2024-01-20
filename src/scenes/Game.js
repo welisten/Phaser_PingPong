@@ -49,7 +49,7 @@ export default class Game extends Phaser.Scene
         //adding the ball to be affected by world's physics rules
         this.physics.add.existing(this.ball)
         this.ball.body.setBounce(1, 1) // -> coefficient of restitution on axio X and Y
-        this.ball.body.setMaxSpeed(This.ballMaximumSpeed)
+        this.ball.body.setMaxSpeed(this.ballMaximumSpeed)
         this.ball.body.setCircle(10) // set the ball's body to be a circle instead of a square
         this.ball.body.setCollideWorldBounds(true, 1, 1,)
 
@@ -87,6 +87,7 @@ export default class Game extends Phaser.Scene
         .setDepth(-1)
 
         this.cursors = this.input.keyboard.createCursorKeys()
+        
         this.time.delayedCall(1000, () => {
             this.resetBall()
         })
@@ -94,7 +95,7 @@ export default class Game extends Phaser.Scene
 
 
     update(){
-        //check the game state
+        //check the game state | the update function must be called only if the game were running
         if(this.paused || this.gameState !== GameState.Running)
         {
             return
@@ -112,7 +113,7 @@ export default class Game extends Phaser.Scene
         if (this.cursors.up.isDown)
         {
             this.paddleLeft.y -= 10
-            body.updateFromGameObject() // atualiza o corpo do objeto na DOM
+            body.updateFromGameObject() // update the object body from DOM
         } 
         else if(this.cursors.down.isDown)
         {
@@ -132,25 +133,25 @@ export default class Game extends Phaser.Scene
         }
 
         // the speed of right paddle AI reaction 
-        const aiSpeed = 3
+        const aiSpeed = 3.5
         
-        if( diff < 0) // the ball is above the paddle - The paddle must up
+        if( diff < 0 ) // the ball is above the paddle - The paddle must up
         {
             
             this.paddleRightVelocity.y = -aiSpeed
             
-            if(this.paddleRightVelocity.y < -10)
+            if(this.paddleRightVelocity.y < -10) // refresh rate control
             {
                 this.paddleRightVelocity.y = -10
             }
 
         } 
-        else if ( diff > 0) // the ball is below the - The paddle must down
+        else if ( diff > 0 ) // the ball is below the - The paddle must down
         {
             
             this.paddleRightVelocity.y = aiSpeed
         
-            if(this.paddleRightVelocity.y > 10)
+            if(this.paddleRightVelocity.y > 10) // refresh rate control
             {
                 this.paddleRightVelocity.y = 10
             }
@@ -167,45 +168,49 @@ export default class Game extends Phaser.Scene
         const leftBound = -30
         const rightBound = gameFullWidth + 30
         
-        if(x >= leftBound && x <= rightBound) {
+        if( x >= leftBound && x <= rightBound ) // function calling control
+        {
             return
         }
 
-        if(this.ball.x < leftBound)
+        if( this.ball.x < leftBound )
         {
             this.incrementRightScore()
         }
-        else if (this.ball.x > rightBound)
+        else if ( this.ball.x > rightBound )
         {
             this.incrementLeftScore()
         }
 
         const maxScore = 3
-        if(this.leftScore >= maxScore)
+
+        if( this.leftScore >= maxScore )
         {
             //Player won
             this.gameState = GameState.PlayerWon
         }
-        else if(this.rightScore >= maxScore)
+        else if( this.rightScore >= maxScore )
         {
-            // the AI won
+            // AI won
             this.gameState = GameState.AIWon
         }
 
-        if(this.gameState === GameState.Running)
+        if( this.gameState === GameState.Running )
         {
             this.resetBall()
         }
         else
         {
-            this.physics.world.remove(this.ball.body)
-            this.scene.stop(GameBackground)
+            this.physics.world.remove( this.ball.body )
+            this.scene.stop( GameBackground )
 
             // Show the Game Over/Win screen
-            this.scene.start(GameOver, {
-                leftScore: this.leftScore,
-                rightScore: this.rightScore
-            })
+            this.scene.start( GameOver,
+                {
+                    leftScore: this.leftScore,
+                    rightScore: this.rightScore
+                }
+            )
         }
     }
 
@@ -222,35 +227,32 @@ export default class Game extends Phaser.Scene
     resetBall(){ //BALL'S VELOCITY AND RANDOM DIRECTION LOGIC
         const ballVelocity = 400
 
-        // positioning the ball
-        this.ball.setPosition(gameHalfWidth, gameHalfHeight)
+        this.ball.setPosition( gameHalfWidth, gameHalfHeight )
 
         // setting a random direction based on an angle
-        const angle = Phaser.Math.Between(10, 60 )
-        const factor = 90 * Phaser.Math.Between(1, 4)
-        const vec =  this.physics.velocityFromAngle(angle + factor, ballVelocity)
+        const angle     = Phaser.Math.Between( 10, 60  )
+        const factor    = 90 * Phaser.Math.Between( 1, 4 )
+        const vec       =  this.physics.velocityFromAngle( angle + factor, ballVelocity )
+        
         this.ball.body.setVelocity(vec.x, vec.y)
     }
     
-    handlePaddlesBallCollision(paddle, ball){
-        this.sound.play(AudioKeys.PongBeep)
+    handlePaddlesBallCollision( paddle, ball ){
+        this.sound.play( AudioKeys.PongBeep )
 
-        console.log(this.ball.body.velocity)
+        // ball get faster
         const vel = this.ball.body.velocity
+        
         vel.x *= 1.05
         vel.y *= 1.05
-        this.ball.body.setVelocity(vel.x, vel.y)
+        
+        this.ball.body.setVelocity( vel.x, vel.y )
     }
 
-    handleBallWorldBoundCollision(body, up, down, left, right){
-        if(left || right){
+    handleBallWorldBoundCollision( body, up, down, left, right ){
+        if( left || right ){
             return
         }
         this.sound.play(AudioKeys.PongPlop)
-    }
-
-    handleGameOver(){
-        
-    }
-
+    } 
 }
