@@ -1,3 +1,5 @@
+// Key to setup game scene system
+
 const TitleScreen       = 'titlescreen'
 const Game              = 'game'
 const GameBackground    = 'game-background'

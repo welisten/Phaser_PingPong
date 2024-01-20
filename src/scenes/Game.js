@@ -9,7 +9,7 @@ import { GameBackground, GameOver } from '../consts/SceneKeys'
 
 // Constants
 import { gameFullWidth, gameFullHeight, gameHalfWidth, gameHalfHeight } from '../consts/Sizes'
-import { White, Green_Score, Red_Score } from '../consts/Colors'
+import { White, Green_Score_Str, Red_Score_Str } from '../consts/Colors'
 import { Pixelify } from "../consts/Fonts";
 import * as AudioKeys from '../consts/AudioKeys'
 
@@ -80,7 +80,7 @@ export default class Game extends Phaser.Scene
             fontFamily: Pixelify,
             fontSize: gameFullWidth * 0.08,
             fontStyle: 'bold',
-            color: Green_Score 
+            color: Green_Score_Str 
         })
         .setOrigin(0.5, 0.5)
 
@@ -90,7 +90,7 @@ export default class Game extends Phaser.Scene
             fontFamily: Pixelify,
             fontSize: gameFullWidth * 0.08,
             fontStyle: 'bold',
-            color: Red_Score
+            color: Red_Score_Str
         })
         .setOrigin(0.5, 0.5)
         this.rightScoreLabel.setDepth(-1)

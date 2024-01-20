@@ -1,23 +1,14 @@
-// const screenFullWidth  = window.innerWidth
-// const screenFullHeight = window.innerHeight
+// Sizes to optimize the canvas screen setup and create a relative size for any other else element
 
-// const screenHalfWidth  = (window.innerWidth) / 2
-// const screenHalfHeight = (window.innerHeight) / 2
-
-const gameFullWidth  = window.innerWidth - 20
+const gameFullWidth  = window.innerWidth - 20 // -> 20 = "padding"
 const gameFullHeight = window.innerHeight - 20
 
 const gameHalfWidth  = gameFullWidth / 2
 const gameHalfHeight = gameFullHeight / 2
 
 export {
-    // screenFullWidth,
-    // screenFullHeight,
-    // screenHalfWidth,
-    // screenHalfHeight,
     gameFullWidth,
     gameFullHeight,
     gameHalfWidth,
     gameHalfHeight
-
 }

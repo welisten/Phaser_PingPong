@@ -5,7 +5,9 @@ import { Game } from '../consts/SceneKeys'
 // Consts
 import {gameHalfWidth, gameHalfHeight} from '../consts/Sizes'
 import {Pixelify} from '../consts/Fonts'
+import { Blue_SubTitle_Str } from '../consts/Colors'
 import * as AudioKeys from '../consts/AudioKeys'
+
 export default class TitleScreen extends Phaser.Scene
 {
     preload(){
@@ -30,7 +32,7 @@ export default class TitleScreen extends Phaser.Scene
             fontSize: gameHalfWidth * 0.08,
             fontStyle: 'bold',
             fontFamily: Pixelify,
-            color: '#3498db'
+            color: Blue_SubTitle_Str
 
         })
         .setOrigin(0.5, 0.5)

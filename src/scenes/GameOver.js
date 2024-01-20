@@ -19,7 +19,7 @@ export default class GameOver extends Phaser.Scene{
             title: 'Game over !',
             FontFamily: Pixelify,
             FontSize: gameHalfWidth * 0.3,
-            Color: Colors.Red_Score,
+            Color: Colors.Red_Score_Str,
             Song: AudioKeys.GameOverSound
         }
     }
@@ -42,7 +42,7 @@ export default class GameOver extends Phaser.Scene{
         {
             // Player win
             this.Title.title =  ' You Win !'
-            this.Title.Color = Colors.Green_Score
+            this.Title.Color = Colors.Green_Score_Str
             this.Title.Song = AudioKeys.WinnerSound
         } 
 
@@ -64,7 +64,7 @@ export default class GameOver extends Phaser.Scene{
             fontFamily: Pixelify,
             fontSize: gameHalfWidth * 0.08,
             fontStyle: 'bold',
-            color: Colors.WhiteStr
+            color: Colors.White_Str
         })
         .setOrigin(0.5)
 
