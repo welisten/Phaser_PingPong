@@ -2,11 +2,11 @@
 import Phaser from "phaser";
 
 // Scenes
+import Preload from "./scenes/Preload";
 import TitleScreen from "./scenes/TitleScreen";
 import Game from "./scenes/Game";
 import GameBackground from "./scenes/gameBackground";
 import GameOver from "./scenes/GameOver";
-import Preload from "./scenes/Preload";
 
 // Conts
 import * as SceneKeys from './consts/SceneKeys'
@@ -20,11 +20,9 @@ import { DarkGray_background } from './consts/Colors'
 const config = {
     width: gameFullWidth,
     height: gameFullHeight,
-    // let phaser automatically choose the best render option
-    type: Phaser.AUTO,
+    type: Phaser.AUTO,                             // let phaser automatically choose the best render option
     backgroundColor: DarkGray_background,
-    // game's physics system
-    physics: {
+    physics: {                                     // game's physics system
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },

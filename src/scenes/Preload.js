@@ -1,8 +1,11 @@
+//Phaser 3.5
 import Phaser from "phaser";
 
-import { TitleScreen } from "../consts/SceneKeys";
-import WebFontFile from "./webFontFile";
+// Web font File API
+import WebFontFile from "./WebFontFile";
 
+// Consts
+import { TitleScreen } from "../consts/SceneKeys";
 import * as AudioKeys from '../consts/AudioKeys' 
 
 export default class Preload extends Phaser.Scene

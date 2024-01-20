@@ -1,9 +1,6 @@
 // PHASER 3.5
 import Phaser from "phaser";
 
-// WebFontFile API
-import WebFontFile from "./webFontFile";
-
 // Scenes
 import { GameBackground, GameOver } from '../consts/SceneKeys'
 
@@ -20,12 +17,10 @@ const GameState = {
     AIWon: 'ai-won'
 }
 
-
-
 export default class Game extends Phaser.Scene
 {
 
-    init(){ // variable delaration to be used after
+    init(){ // variables delaration to be used later
         
         this.gameState = GameState.Running
         
@@ -35,56 +30,52 @@ export default class Game extends Phaser.Scene
         this.leftScore = 0
         this.rightScore = 0
 
-        // THERE ARE OTHERS WAYS TO DO THIS
         this.paused = false
+
+        this.ballMaximumSpeed = 600
     }
 
 
     create(){
-
-        // add and setting the background as a background
         this.scene.run(GameBackground)
         this.scene.sendToBack(GameBackground)
         
-        // setting the game's screen bounds
         this.physics.world.setBounds( -100, 20, gameFullWidth + 200, gameFullHeight - 40 )
         
 
-        // creating the ball (Game_object)
+        //                  creating the ball (Game_object)
         this.ball = this.add.circle(gameHalfWidth, gameHalfHeight, 10, White, 1)
         
         //adding the ball to be affected by world's physics rules
         this.physics.add.existing(this.ball)
         this.ball.body.setBounce(1, 1) // -> coefficient of restitution on axio X and Y
-        this.ball.body.setMaxSpeed(600)
-        this.ball.body.setCircle(10) // set the body to be a circle instead of a square
-
+        this.ball.body.setMaxSpeed(This.ballMaximumSpeed)
+        this.ball.body.setCircle(10) // set the ball's body to be a circle instead of a square
         this.ball.body.setCollideWorldBounds(true, 1, 1,)
+
         this.ball.body.onWorldBounds = true //trigger the event
         
-        // making paddles
+        //                      creating the paddles
         this.paddleLeft = this.add.rectangle( 35, gameHalfHeight, 20, 150, White, 1)
         this.physics.add.existing(this.paddleLeft, true) // -> static
         
         this.paddleRight = this.add.rectangle(gameFullWidth - 35, gameHalfHeight, 20, 150, White, 1)
         this.physics.add.existing(this.paddleRight, true)
         
-        // adding the collision possibility between the paddle and the ball
         this.physics.add.collider(this.paddleLeft, this.ball , this.handlePaddlesBallCollision, undefined, this)
         this.physics.add.collider(this.paddleRight, this.ball, this.handlePaddlesBallCollision, undefined, this)
         
         this.physics.world.on('worldbounds', this.handleBallWorldBoundCollision, this)
 
-        // the score interface / the label
+        //                      the score interface / the label
         this.leftScoreLabel = this.add.text(gameHalfWidth * 0.75  , gameHalfHeight * 0.5, '0',  {
             fontFamily: Pixelify,
             fontSize: gameFullWidth * 0.08,
             fontStyle: 'bold',
             color: Green_Score_Str 
         })
-        .setOrigin(0.5, 0.5)
-
-        this.leftScoreLabel.setDepth(-1)
+        .setOrigin(0.5)
+        .setDepth(-1)
         
         this.rightScoreLabel = this.add.text(gameHalfWidth * 1.25, gameHalfHeight * 1.5, '0', {
             fontFamily: Pixelify,
@@ -92,10 +83,9 @@ export default class Game extends Phaser.Scene
             fontStyle: 'bold',
             color: Red_Score_Str
         })
-        .setOrigin(0.5, 0.5)
-        this.rightScoreLabel.setDepth(-1)
+        .setOrigin(0.5)
+        .setDepth(-1)
 
-        
         this.cursors = this.input.keyboard.createCursorKeys()
         this.time.delayedCall(1000, () => {
             this.resetBall()
